@@ -1,12 +1,14 @@
+#Demo video:- 
+
 # Android Video Streaming App
 
 A real-time video streaming system that captures live camera video on Android and transmits it to a desktop receiver over a local WiFi network using H.264 hardware encoding.
 
----
+
 
 ## Architecture Overview
 
-```
+
 Android Device                          Desktop (Python)
 ─────────────────────────────────────   ──────────────────────────
 CameraX (YUV_420_888)                        
@@ -109,3 +111,7 @@ README.md
 - The RTSP bonus task is not implemented — streaming uses TCP with custom length-framed NAL units
 - Port 8080 must be open and not blocked by firewall on the desktop
 - Tested on Android 13, Python 3.12, Windows 11
+
+
+
+
