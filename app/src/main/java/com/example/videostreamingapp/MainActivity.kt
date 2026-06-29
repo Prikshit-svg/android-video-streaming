@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.videostreamingapp.camera.CameraPreviewScreen
 import com.example.videostreamingapp.ui.theme.VideoStreamingAppTheme
+import com.example.videostreamingapp.viewModels.CamViewModel
 import com.example.videostreamingapp.viewModels.StreamingViewModel
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             VideoStreamingAppTheme {
                 val streamingViewModel: StreamingViewModel = viewModel()
-
+val camViewModel: CamViewModel=viewModel()
                 Box(modifier = Modifier.fillMaxSize()) {
                     // Camera preview fills the entire screen
                     CameraPreviewScreen(viewModel = streamingViewModel)
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
                                 shape = RoundedCornerShape(12.dp)
                             )
                     ) {
-                        StreamingScreen(viewModel = streamingViewModel)
+                        StreamingScreen(viewModel = streamingViewModel,camViewModel)
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.example.videostreamingapp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -36,7 +37,8 @@ StreamingControls( state = state,
     onIpChange = { ip = it },
     onPortChange = { port = it },
     onConnectClick = { viewModel.connect(ip, port.toIntOrNull() ?: 8080) },
-    onDisconnectClick = { viewModel.disconnect() },
+    onDisconnectClick = {
+        viewModel.disconnect() },
     {camViewModel.changeCam()}
 
     )
@@ -66,7 +68,12 @@ fun StreamingControls(state: ConnectionState,
         when (state) {
             is ConnectionState.Idle, is ConnectionState.Error -> {
                 Button(onClick = onConnectClick) {
+                    Row(
+                        Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.Start
+                    ) {
                     Text("Connect & Stream")
+                        Button(onClick = onCamSwitchClick) {Text("Switch") }
+                    }
                 }
                 if (state is ConnectionState.Error) {
                     Text(state.message, color = Color.Red)
@@ -79,12 +86,10 @@ fun StreamingControls(state: ConnectionState,
             is ConnectionState.Streaming -> {
                 val s = state as ConnectionState.Streaming
                 Text("Streaming — ${s.framesSent} frames, ${"%.1f".format(s.fps)} fps")
-                Row(
-                    Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
+
                     Button(onClick = onDisconnectClick) { Text("Stop") }
-                    Button(onClick = onCamSwitchClick) {Text("Switch") }
-                }
+                    Spacer(Modifier.padding(20.dp))
+
 
             }
         }

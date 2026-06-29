@@ -6,8 +6,8 @@ import android.media.MediaFormat
 import java.io.Closeable
 
 class H264Encoder(
-    private val width: Int,// frame dimensions. MediaCodec must know these upfront to allocate its internal buffers
-    private val height: Int,// frame dimensions. MediaCodec must know these upfront to allocate its internal buffers
+    val width: Int,// frame dimensions. MediaCodec must know these upfront to allocate its internal buffers
+    val height: Int,// frame dimensions. MediaCodec must know these upfront to allocate its internal buffers
     bitRate:Int=2_000_000,//sets quality of 2mbps
     frameRate:Int=30,//it is fps and is not hard set
     iFrameInterval:Int=1//decides the interval after which an I frame is sent

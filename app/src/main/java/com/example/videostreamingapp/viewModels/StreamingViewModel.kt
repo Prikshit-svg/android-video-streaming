@@ -58,7 +58,11 @@ class StreamingViewModel : ViewModel() {
 
     private suspend fun streamLoop() {
         frameQueue.asFlow().collect { frame ->
-            try {
+            try { if (encoder != null && (encoder!!.width != frame.width || encoder!!.height != frame.height)) {
+                encoder?.close()
+                encoder = null
+            }
+
                 val enc = encoder ?: H264Encoder(frame.width, frame.height).also { encoder = it }
                 val nalUnits = enc.encode(frame.nv21)
                 for (nal in nalUnits) {
