@@ -1,8 +1,13 @@
 package com.example.videostreamingapp
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,11 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.videostreamingapp.viewModels.CamViewModel
 import com.example.videostreamingapp.viewModels.StreamingViewModel
 
 
 @Composable
-fun StreamingScreen(viewModel: StreamingViewModel) {
+fun StreamingScreen(viewModel: StreamingViewModel,camViewModel : CamViewModel) {
     val state by viewModel.connectionState.collectAsStateWithLifecycle()
     var ip by remember { mutableStateOf("192.168.1.") }
     var port by remember { mutableStateOf("8080") }
@@ -30,7 +36,10 @@ StreamingControls( state = state,
     onIpChange = { ip = it },
     onPortChange = { port = it },
     onConnectClick = { viewModel.connect(ip, port.toIntOrNull() ?: 8080) },
-    onDisconnectClick = { viewModel.disconnect() })
+    onDisconnectClick = { viewModel.disconnect() },
+    {camViewModel.changeCam()}
+
+    )
 }
 @Composable
 fun StreamingControls(state: ConnectionState,
@@ -39,7 +48,8 @@ fun StreamingControls(state: ConnectionState,
                       onIpChange: (String) -> Unit,
                       onPortChange: (String) -> Unit,
                       onConnectClick: () -> Unit,
-                      onDisconnectClick: () -> Unit
+                      onDisconnectClick: () -> Unit,
+                      onCamSwitchClick: () -> Unit
 ) {
     Column(Modifier.padding(16.dp)) {
         OutlinedTextField(
@@ -69,7 +79,13 @@ fun StreamingControls(state: ConnectionState,
             is ConnectionState.Streaming -> {
                 val s = state as ConnectionState.Streaming
                 Text("Streaming — ${s.framesSent} frames, ${"%.1f".format(s.fps)} fps")
-                Button(onClick = onDisconnectClick) { Text("Stop") }
+                Row(
+                    Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(onClick = onDisconnectClick) { Text("Stop") }
+                    Button(onClick = onCamSwitchClick) {Text("Switch") }
+                }
+
             }
         }
     }
@@ -88,7 +104,7 @@ fun PreviewStreamingControl() {
             onIpChange = {},
             onPortChange = {},
             onConnectClick = {},
-            onDisconnectClick = {}
+            onDisconnectClick = {},{}
         )
 
         // 2. Streaming State Preview
@@ -100,7 +116,8 @@ fun PreviewStreamingControl() {
             onIpChange = {},
             onPortChange = {},
             onConnectClick = {},
-            onDisconnectClick = {}
+            onDisconnectClick = {},
+            onCamSwitchClick = {}
         )
     }
 }
